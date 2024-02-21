@@ -43,6 +43,8 @@ while(p1)
     p1=p1 ->_next;
     Node_free(p2);
 }
+StrList->_head=NULL;
+StrList->_size =0;
 }
 void StrList_insertFirst(StrList* list,
 					  char* data) {
@@ -71,30 +73,58 @@ current->_next=newNode;
 }
   }
 
-void StrList_insertAt(StrList* StrList,
-	const char* data,int index){
-         if (index < 0 || index > StrList->_size) {
+// void StrList_insertAt(StrList* StrList,
+// 	const char* data,int index){
+//          if (index < 0 || index > StrList->_size) {
+//         printf("Invalid index\n");
+//         return;
+//     }
+//     Node* newNode=Node_alloc(data,NULL);
+//     if (index == 0) {
+//         newNode->_next = StrList->_head;
+//         StrList->_head = newNode;
+//     } else {
+//         // Find the node at index-1
+//         Node *current = StrList->_head;
+//         for (int i = 0; i < index - 1; i++) {
+//             current = current->_next;
+//         }
+//         // Insert the new node after the node at index-1
+//         newNode->_next = current->_next;
+//         current->_next = newNode;
+//     }
+
+//     // Increment the size of the list
+//     StrList->_size++;
+// }
+
+void StrList_insertAt(StrList* StrList, const char* data, int index) {
+    if (index < 0 || index > StrList->_size) {
         printf("Invalid index\n");
         return;
     }
-    Node* newNode=Node_alloc(data,NULL);
+
+    Node* newNode = Node_alloc(data, NULL);
+
     if (index == 0) {
         newNode->_next = StrList->_head;
         StrList->_head = newNode;
     } else {
-        // Find the node at index-1
-        Node *current = StrList->_head;
+        Node* current = StrList->_head;
         for (int i = 0; i < index - 1; i++) {
+            if (current == NULL) {
+                printf("Invalid index\n");
+                return;
+            }
             current = current->_next;
         }
-        // Insert the new node after the node at index-1
         newNode->_next = current->_next;
         current->_next = newNode;
     }
 
-    // Increment the size of the list
     StrList->_size++;
 }
+
     
 char* StrList_firstData(const StrList* StrList){
     return StrList-> _head-> data;
@@ -122,9 +152,40 @@ void StrList_print(const StrList* StrList){
     while (p){
         printf("%s ",p->data);
         p=p->_next;
-        printf("\n");
     }
+    printf("\n");
 }
+// void StrList_print(const StrList* StrList) {
+//     if (StrList == NULL) {
+//         printf("\n");
+//         return;
+//     }
+//     const Node* p = StrList->_head;
+//     while (p) {
+//         printf("%s", p->data);
+//         p = p->_next;
+//         if (p) {
+//             printf(" "); // Add a space only if there's another word
+//         }
+//     }
+//     printf("\n");
+// }
+
+
+// void StrList_print(const StrList* StrList) {
+//     if (StrList == NULL) {
+//         printf("\n");
+//         return;
+//     }
+//     const Node* p = StrList->_head;
+//     printf("%s", p->data); 
+//     while (p->_next)
+//     {
+//         printf(" %s", p->data); 
+//     }
+//     printf("\n");
+// }
+
 
 void StrList_printAt(const StrList* Strlist,int index){
      if (Strlist == NULL || Strlist->_head == NULL) {
@@ -174,31 +235,32 @@ int StrList_count(StrList* StrList, const char* data){
     }
     return howMuchDada;
 }
-void StrList_remove(StrList* StrList, const char* data)
-{
-      if (StrList == NULL || StrList->_head == NULL) {
+
+
+
+void StrList_remove(StrList* list, const char* data) {
+    if (list == NULL || list->_head == NULL) {
         return; // No operation if the list is empty
     }
-      Node* current = StrList->_head;
-      Node* prev = NULL;
-     while (current)
-     {
-        if(strcmp(current->data, data)==0){
 
-            if(prev==NULL){
-                StrList->_head =current->_next;
-            }
-            else{
-            prev->_next=current->_next;
+    Node* current = list->_head;
+    Node* prev = NULL;
+
+    while (current) {
+        if (strcmp(current->data, data) == 0) {
+            if (prev == NULL) {
+                list->_head = current->_next;
+            } else {
+                prev->_next = current->_next;
             }
             free(current);
-            StrList->_size--;
-             
+            list->_size--;
+            return; // Exit after removing the first occurrence
+        } else {
+            prev = current;
         }
-        else{
-            prev=current;}
-            current=current->_next;
-     }
+        current = current->_next;
+    }
 }
 void StrList_removeAt(StrList* StrList, int index){
     if(StrList==NULL)
