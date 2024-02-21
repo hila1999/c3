@@ -19,14 +19,18 @@ void Node_free(Node* node){
     free(node);
 }
 
-Node* Node_alloc(char* data,
+Node* Node_alloc(const char* data,
 				 Node* next) {
 	Node* p= (Node*)malloc(sizeof(Node));
     if (p == NULL) {
         // Memory allocation failed
         return NULL;}
-	p->data= data;
-	p->_next= next;
+
+	p->data= strdup(data);
+	// p->_next= next;
+    if(p->data==NULL){
+        free(p);
+        return NULL;}
 	return p;
 }
 void StrList_free(StrList* StrList){
@@ -50,6 +54,51 @@ void StrList_insertFirst(StrList* list,
     list->_head=newNode;
 	++(list->_size);
 }
+void StrList_insertLast(StrList* StrList,
+					  const char* data){
+   Node* newNode=Node_alloc(data,NULL);
+   if(StrList->_head==NULL){
+     StrList->_head=newNode;
+     ++(StrList->_size);
+   }
+  else{
+  Node* current = StrList->_head;
+  while ((current->_next!= NULL)){
+    current =current->_next;
+  }
+current->_next=newNode;  
+++(StrList->_size);
+}
+  }
+
+void StrList_insertAt(StrList* StrList,
+	const char* data,int index){
+         if (index < 0 || index > StrList->_size) {
+        printf("Invalid index\n");
+        return;
+    }
+    Node* newNode=Node_alloc(data,NULL);
+    if (index == 0) {
+        newNode->_next = StrList->_head;
+        StrList->_head = newNode;
+    } else {
+        // Find the node at index-1
+        Node *current = StrList->_head;
+        for (int i = 0; i < index - 1; i++) {
+            current = current->_next;
+        }
+        // Insert the new node after the node at index-1
+        newNode->_next = current->_next;
+        current->_next = newNode;
+    }
+
+    // Increment the size of the list
+    StrList->_size++;
+}
+    
+char* StrList_firstData(const StrList* StrList){
+    return StrList-> _head-> data;
+}
 //Allocate memory for the list structure.
 //Initialize the list structure with appropriate values.
 //Return a pointer to the newly allocated list.
@@ -65,33 +114,15 @@ size_t StrList_size(const StrList* StrList){
     }
     else return StrList->_size;
 }
-
-// void StrList_insertLast(StrList* StrList,
-// 					  const char* data){
-//     Node* temp = StrList->_head;
-//     while(temp->_next!=NULL){
-//     temp=temp ->_next;}
-//     temp->_last=Node_alloc(*data,temp->_last);
-//     StrList->_size++;
-//                       }
-//  void StrList_insertAt(StrList* StrList,
-// 	const char* data,int index){
-//         Node* temp=StrList ->_head;
-//         for(int i=0;i<index;i++){
-//         temp=temp ->_next;}
-//         temp->_next= Node_alloc(*data,temp->_next) ;
-//     }
-// char* StrList_firstData(const StrList* StrList){
-//     return StrList-> _head-> data;
-// }
 void StrList_print(const StrList* StrList){
     if(StrList==NULL) {
-    printf("List is empty.\n");
+    printf("\n");
     return;}
     const Node* p=StrList-> _head;
     while (p){
-        printf("%s\n",p->data);
+        printf("%s ",p->data);
         p=p->_next;
+        printf("\n");
     }
 }
 
@@ -263,7 +294,15 @@ if (StrList == NULL || StrList->_head == NULL) {
     return 1; // Sorted
 }
 
-
-                      
+void StrList_reverse( StrList* StrList){
+    Node *prev = NULL, *current = StrList->_head, *next;
+    while (current != NULL) {
+        next = current->_next; // Store the next node
+        current->_next = prev; // Reverse current node's pointer
+        prev = current; // Move pointers one position ahead
+        current = next;
+    }
+    StrList->_head = prev; // Update the head of the list
+}           
 
 
