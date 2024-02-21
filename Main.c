@@ -46,9 +46,10 @@ int main() {
              }                             
                 break;
             case 2:
-            if(scanf("%s %d", data,&index) != 2){
+            if(scanf("%d %s", &index, data) != 2){
             printf("invalid input \n");
             break;}
+            // scanf("%d %s", &index,data);
             StrList_insertAt(listPtr1,data,index);
             break;
             case 3://is print and pass line to cheack
@@ -90,9 +91,12 @@ int main() {
             }
              case 8 :
             {
-                char* temp="World";
-                 StrList_remove(listPtr1,temp);
-
+              // char* temp="World";
+              if(scanf("%s",data)!= 1){
+                printf("invalid input \n");
+              break;
+              }
+              StrList_remove(listPtr1,data);
               break;
             }
              case 9 :
@@ -111,22 +115,20 @@ int main() {
             }
             case 11 :
             {
-              printf("inside 11\n");
               StrList_free(listPtr1);
               break;
             }
             case 12 :
             {
-              printf("inside 12\n");
               StrList_sort(listPtr1);
               break;
             }
             case 13 :
             {
               int ans=StrList_isSorted(listPtr1);
-              if(ans==1)  {printf("True");}
+              if(ans==1)  {printf("true\n");}
               else
-              printf("False");
+              printf("false\n");
               break;
             }
         
