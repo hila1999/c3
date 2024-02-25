@@ -14,11 +14,17 @@ typedef struct _StrList{
      Node* _head;
     size_t _size;
 } StrList;
-
-void Node_free(Node* node){
-    free(node);
+//Allocate memory for the list structure.
+//Initialize the list structure with appropriate values.
+//Return a pointer to the newly allocated list.
+StrList* StrList_alloc(){
+    StrList* q = (StrList*)malloc(sizeof(StrList));
+     if (q == NULL){
+        return NULL;}
+    q->_head =NULL;
+    q->_size =0;
+    return q;
 }
-
 Node* Node_alloc(const char* data,
 				 Node* next) {
 	Node* p= (Node*)malloc(sizeof(Node));
@@ -30,8 +36,15 @@ Node* Node_alloc(const char* data,
     if(p->data==NULL){
         free(p);
         return NULL;}
+    p->_next= next;  
 	return p;
 }
+void Node_free(Node* node){
+    free(node->data);
+    free(node);
+}
+
+
 void StrList_free(StrList* StrList){
 if (StrList==NULL) return;
 Node* p1 = StrList-> _head;
@@ -44,58 +57,66 @@ while(p1)
 }
 StrList->_head=NULL;
 StrList->_size =0;
+// free(StrList);
 }
-void StrList_insertFirst(StrList* list,
-					  char* data) {
-	Node* newNode = Node_alloc(data,list->_head);
-     if (newNode == NULL) {
-        // Memory allocation failed
-        return;
-    }
-    list->_head=newNode;
-	++(list->_size);
+void StrList_free1(StrList* StrList){
+if (StrList==NULL) return;
+Node* p1 = StrList-> _head;
+Node* p2;
+while(p1)
+{
+    p2=p1;
+    p1=p1 ->_next;
+    Node_free(p2);
 }
-void StrList_insertLast(StrList* StrList,
-					  const char* data){
-   Node* newNode=Node_alloc(data,NULL);
-   if(StrList->_head==NULL){
-     StrList->_head=newNode;
-     ++(StrList->_size);
-   }
-  else{
-  Node* current = StrList->_head;
-  while ((current->_next!= NULL)){
-    current =current->_next;
-  }
-current->_next=newNode;  
-++(StrList->_size);
-}
-  }
 
-// void StrList_insertAt(StrList* StrList,
-// 	const char* data,int index){
-//          if (index < 0 || index > StrList->_size) {
-//         printf("Invalid index\n");
+free(StrList);
+}
+
+// void StrList_insertFirst(StrList* list,
+// 					  char* data) {
+// 	Node* newNode = Node_alloc(data,list->_head);
+//      if (newNode == NULL) {
+//         // Memory allocation failed
 //         return;
 //     }
-//     Node* newNode=Node_alloc(data,NULL);
-//     if (index == 0) {
-//         newNode->_next = StrList->_head;
-//         StrList->_head = newNode;
-//     } else {
-//         // Find the node at index-1
-//         Node *current = StrList->_head;
-//         for (int i = 0; i < index - 1; i++) {
-//             current = current->_next;
-//         }
-//         // Insert the new node after the node at index-1
-//         newNode->_next = current->_next;
-//         current->_next = newNode;
-//     }
-
-//     // Increment the size of the list
-//     StrList->_size++;
+//     list->_head=newNode;
+// 	++(list->_size);
 // }
+// void StrList_insertLast(StrList* StrList,
+// 					  const char* data){
+//    Node* newNode=Node_alloc(data,NULL);
+//    if(StrList->_head==NULL){
+//      StrList->_head=newNode;
+//    }
+//   else{
+//   Node* current = StrList->_head;
+//   while (current->_next!= NULL){
+//     current =current->_next;
+//   }
+//    current->_next=newNode;  
+// }
+// ++(StrList->_size);
+
+//   }
+
+void StrList_insertLast(StrList* StrList, const char* data) {
+    if (StrList == NULL) {
+        printf("Error: StrList is NULL\n");
+        return;
+    }
+    if (StrList->_head == NULL) {
+        StrList->_head = Node_alloc(data, NULL);
+        StrList->_size = 1;
+        return;
+    }
+    Node* p1 = StrList->_head;
+    while (p1->_next != NULL) {
+        p1 = p1->_next;
+    }
+    p1->_next = Node_alloc(data, NULL);
+    StrList->_size++;
+}
 
 void StrList_insertAt(StrList* StrList, const char* data, int index) {
     if (index < 0 || index > StrList->_size) {
@@ -128,15 +149,7 @@ void StrList_insertAt(StrList* StrList, const char* data, int index) {
 char* StrList_firstData(const StrList* StrList){
     return StrList-> _head-> data;
 }
-//Allocate memory for the list structure.
-//Initialize the list structure with appropriate values.
-//Return a pointer to the newly allocated list.
-StrList* StrList_alloc(){
-    StrList* q = (StrList*)malloc(sizeof(StrList));
-    q->_head =NULL;
-    q->_size =0;
-    return q;
-}
+
 size_t StrList_size(const StrList* StrList){
     if(StrList==NULL){
         return 0;
@@ -162,36 +175,6 @@ void StrList_print(const StrList* StrList){
     }
     printf("\n");
 }
-// void StrList_print(const StrList* StrList) {
-//     if (StrList == NULL) {
-//         printf("\n");
-//         return;
-//     }
-//     const Node* p = StrList->_head;
-//     while (p) {
-//         printf("%s", p->data);
-//         p = p->_next;
-//         if (p) {
-//             printf(" "); // Add a space only if there's another word
-//         }
-//     }
-//     printf("\n");
-// }
-
-
-// void StrList_print(const StrList* StrList) {
-//     if (StrList == NULL) {
-//         printf("\n");
-//         return;
-//     }
-//     const Node* p = StrList->_head;
-//     printf("%s", p->data); 
-//     while (p->_next)
-//     {
-//         printf(" %s", p->data); 
-//     }
-//     printf("\n");
-// }
 
 
 void StrList_printAt(const StrList* Strlist,int index){
@@ -260,6 +243,7 @@ void StrList_remove(StrList* list, const char* data) {
             } else {
                 prev->_next = current->_next;
             }
+            free(current->data);
             free(current);
             list->_size--;
             return; // Exit after removing the first occurrence
