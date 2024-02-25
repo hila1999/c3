@@ -9,15 +9,6 @@ int main() {
     int size;
     int index;
 
-    // char *strings[] = {"Hello", "World", "This", "Is", "An", "World", "Of", "World"};
-
-    // int i;
-    
-    // StrList* listPtr1 = StrList_alloc();
-    
-    // for (i = 0; i < sizeof(strings) / sizeof(strings[0]); ++i) {
-    //     StrList_insertLast(listPtr1, strings[i]);
-    // }
 
     StrList* listPtr1 =StrList_alloc();
                if (listPtr1 == NULL) {
@@ -26,7 +17,6 @@ int main() {
                 
 
     do {
-        // printf("WHICH FUNCTION do you want to do? Enter a number: ");
         if(scanf(" %d", &choice) !=1){
           printf("invalid input \n");
                 break;
@@ -43,6 +33,7 @@ int main() {
               break;
              }
              StrList_insertLast(listPtr1, data);
+             
              }                             
                 break;
             case 2:
@@ -126,9 +117,9 @@ int main() {
             case 13 :
             {
               int ans=StrList_isSorted(listPtr1);
-              if(ans==1)  {printf("true\n");}
+              if(ans==1)  {printf("true");}
               else
-              printf("false\n");
+              printf("false");
               break;
             }
         
