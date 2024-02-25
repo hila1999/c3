@@ -11,9 +11,9 @@ int main() {
 
 
     StrList* listPtr1 =StrList_alloc();
-               if (listPtr1 == NULL) {
-               fprintf(stderr, "Memory allocation failed\n");
-               return EXIT_FAILURE;}
+              //  if (listPtr1 == NULL) {
+              //  fprintf(stderr, "Memory allocation failed\n");
+              //  return EXIT_FAILURE;}
                 
 
     do {
@@ -117,16 +117,17 @@ int main() {
             case 13 :
             {
               int ans=StrList_isSorted(listPtr1);
-              if(ans==1)  {printf("true");}
+              if(ans==1)  {printf("true\n");}
               else
-              printf("false");
+              printf("false\n");
               break;
             }
         
         }  
        } while (choice != 0); // Corrected the loop condition and removed redundant braces
 
-    StrList_free(listPtr1);
+    StrList_free1(listPtr1);
+    // free(listPtr1);
     return 0;
 }
 
