@@ -91,7 +91,7 @@ void StrList_removeAt(StrList* StrList, int index);
  * returns 0 if not and any other number if yes
  */
 int StrList_isEqual(const StrList* StrList1, const StrList* StrList2);
-
+void StrList_free1(StrList* StrList);
 /*
  * Clones the given StrList. 
  * It's the user responsibility to free it with StrList_free.
