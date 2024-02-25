@@ -25,7 +25,6 @@ Node* Node_alloc(const char* data,
     if (p == NULL) {
         // Memory allocation failed
         return NULL;}
-
 	p->data= strdup(data);
 	// p->_next= next;
     if(p->data==NULL){
@@ -149,9 +148,17 @@ void StrList_print(const StrList* StrList){
     printf("\n");
     return;}
     const Node* p=StrList-> _head;
-    while (p){
-        printf("%s ",p->data);
-        p=p->_next;
+    while (p!=NULL){
+        if(p->_next==NULL){
+        printf("%s",p->data);
+        p=p->_next; 
+
+        }
+      else 
+      {
+       printf("%s ",p->data);
+        p=p->_next; 
+      }
     }
     printf("\n");
 }
