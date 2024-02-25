@@ -6,16 +6,16 @@ AR = ar
 
 all: StrList 
 
-StrList: Main.o libStrList.a
+StrList: main.o libStrList.a
 	$(CC) $(CFLAGS) -o $@ $^
 
 libStrList.a: StrList.o
 	$(AR) -rcs $@ $^
 
-Main.o: Main.c StrList.h
+main.o: main.c StrList.h
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY: clean all  
 
 clean:  
-	rm -f *.o *.a StrList
+	rm -f *.o *.a  StrList
