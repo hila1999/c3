@@ -73,33 +73,6 @@ while(p1)
 free(StrList);
 }
 
-// void StrList_insertFirst(StrList* list,
-// 					  char* data) {
-// 	Node* newNode = Node_alloc(data,list->_head);
-//      if (newNode == NULL) {
-//         // Memory allocation failed
-//         return;
-//     }
-//     list->_head=newNode;
-// 	++(list->_size);
-// }
-// void StrList_insertLast(StrList* StrList,
-// 					  const char* data){
-//    Node* newNode=Node_alloc(data,NULL);
-//    if(StrList->_head==NULL){
-//      StrList->_head=newNode;
-//    }
-//   else{
-//   Node* current = StrList->_head;
-//   while (current->_next!= NULL){
-//     current =current->_next;
-//   }
-//    current->_next=newNode;  
-// }
-// ++(StrList->_size);
-
-//   }
-
 void StrList_insertLast(StrList* StrList, const char* data) {
     if (StrList == NULL) {
         printf("Error: StrList is NULL\n");
@@ -200,20 +173,6 @@ int StrList_printLen(const StrList* Strlist){
     }
     return totalLen;
 }
-// int StrList_isEqual(const StrList* StrList1, const StrList* StrList2){
-//     const int eq= 0;
-// 	const int neq= 1;
-	
-// 	const Node* p1= strList1->_head;
-// 	const Node* p2= strList2->_head;
-// 	while(p1) {
-// 		if (p2==NULL||p1->data!=p2->_data) return neq;
-// 		p1= p1->_next;
-// 		p2= p2->_next;
-// 	}
-// 	if (p2!=NULL) return neq;
-// 	return eq;
-// }
 
 int StrList_count(StrList* StrList, const char* data){
    const Node* current=StrList-> _head;
@@ -253,56 +212,30 @@ void StrList_remove(StrList* list, const char* data) {
         current = current->_next;
     }
 }
+
 void StrList_removeAt(StrList* StrList, int index){
-    if(StrList==NULL)
-    return;
-     Node* current = StrList->_head;
-     Node* prev = NULL;
-
-    while(current!=NULL&&index>0){
-    prev=current;
-    current=current->_next;
-    index--;
+    if (StrList!=NULL){
+    if (index<0)return;
+    Node* current = StrList->_head;
+    Node* previous = NULL;
+    int y=0;
+    while (current!=NULL&&y<index)
+    {
+     previous=current;
+     current=current->_next; 
+     y++;
     }
-    if(current!=NULL){
-        if(prev==NULL){
-            StrList->_head=current->_next;
-        }
-        else{
-          prev->_next=current->_next;
-        }
-            free(current);
-            StrList->_size--;
-        }
+    if (current==NULL)return;
+    if (previous==NULL){StrList->_head=current->_next;
+    StrList->_size--;}
+    else{
+        previous->_next=current->_next;
+        StrList->_size--;
     }
+    Node_free(current);
+    }
+}
 
-// StrList* StrList_clone(const StrList* StrList){
-//     StrList* ret =StrList_alloc();
-//     const Node* old =StrList->_head;
-//     Node* * copy =&(ret->_head);
-//     ret->_size=StrList->_size;
-//     while(old){
-//         *copy=Node_alloc(old->data,NULL);
-//         old=old->_next;
-//         copy=&((*copy)->_next);
-//     }
-//     return ret;
-// }
-// void StrList_reverse(StrList* list) {
-//     Node *prev = NULL, *current = list->head, *next = NULL;
-//     while (current != NULL) {
-//         next = current->_next; // Store next node
-//         current->_next = prev; // Reverse current node's pointer
-//         prev = current; // Move pointers one position ahead
-//         current = next;
-//     }
-//     list->_head = prev; // Update head to point to the new first node
-// }
-// void swap(StrList* a, StrList* b) {
-//     char* temp = a->str;
-//     a->str = b->str;
-//     b->str = temp;
-// }
  void StrList_sort(StrList* StrList) {
     if (StrList == NULL || StrList->_head == NULL) {
         return; // No operation if the list is empty
@@ -357,5 +290,86 @@ void StrList_reverse( StrList* StrList){
     }
     StrList->_head = prev; // Update the head of the list
 }           
+
+int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
+{
+    Node* head1=StrList1->_head;
+    Node* head2=StrList2->_head;
+    while (head1!=NULL&&head2!=NULL)
+    {
+        if(!strcmp(head1->data,head2->data))
+        {
+        return 0;
+        }
+    }
+    if (head1==NULL&&head2!=NULL)
+    {
+        return 0;
+    }
+     if (head2==NULL&&head1!=NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+// StrList* StrList_clone(const StrList* StrList)
+// {
+//         if (StrList==NULL)
+//         {
+//             return StrList_alloc();
+//         }
+
+//         StrList* list=StrList_alloc();
+//         Node * temp=Node_alloc(StrList->_head->data,NULL);
+//         list->_head=temp;
+//         list->_size=list->_size+1;
+//         Node * head=StrList->_head;
+//         head=head->_next;
+//         while (head!=NULL)
+//         {
+//          Node *temp_loclal=Node_alloc(head->data,NULL);
+//           temp->_next=temp_loclal;
+//           temp=temp->_next;
+//           head=head->_next;
+//           free(temp_loclal->data);
+//           free(temp_loclal);
+//         }
+
+//          free(temp->data);
+//          free(temp);
+//         return list;
+// }
+StrList* StrList_clone(const StrList* originalList) {
+    if (originalList == NULL) {
+        return StrList_alloc();
+    }
+
+    StrList* newList = StrList_alloc();
+    Node* originalNode = originalList->_head;
+
+    if (originalNode != NULL) {
+        Node* temp = Node_alloc(originalNode->data, NULL);
+        newList->_head = temp;
+        newList->_size++;
+
+        originalNode = originalNode->_next;
+        Node* previousNewNode = temp;
+
+        while (originalNode != NULL) {
+            Node* newNode = Node_alloc(originalNode->data, NULL);
+            previousNewNode->_next = newNode;
+            previousNewNode = newNode;
+            newList->_size++;
+
+            originalNode = originalNode->_next;
+        }
+    }
+
+    return newList;
+}
+
+
+
+
 
 
