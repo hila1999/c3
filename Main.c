@@ -9,6 +9,8 @@ int main() {
     int size;
     int index;
 
+    
+
 
     StrList* listPtr1 =StrList_alloc();
               //  if (listPtr1 == NULL) {
