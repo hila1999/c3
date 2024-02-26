@@ -1,7 +1,8 @@
 #pragma once
 
 #include <stdlib.h>
-#define WORD_MAX_SIZE 64
+//for 16 bit system
+#define WORD_MAX_SIZE  65535
 /********************************************************************************
  *
  * A StrList library.
