@@ -200,16 +200,19 @@ void StrList_remove(StrList* list, const char* data) {
             if (prev == NULL) {
                 list->_head = current->_next;
             } else {
-                prev->_next = current->_next;
+                prev->_next = current->_next;  
             }
-            free(current->data);
-            free(current);
+            Node * temp=current;
+            current = current->_next;
+            // free(current->data);
+            Node_free(temp);
             list->_size--;
-            return; // Exit after removing the first occurrence
+            
         } else {
             prev = current;
+            current = current->_next;
+
         }
-        current = current->_next;
     }
 }
 
@@ -281,6 +284,9 @@ if (StrList == NULL || StrList->_head == NULL) {
 }
 
 void StrList_reverse( StrList* StrList){
+    if(StrList==NULL){
+        return;
+    }
     Node *prev = NULL, *current = StrList->_head, *next;
     while (current != NULL) {
         next = current->_next; // Store the next node
@@ -293,6 +299,9 @@ void StrList_reverse( StrList* StrList){
 
 int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
 {
+    if(StrList1==NULL&&StrList2==NULL){
+        return 1;
+    }
     Node* head1=StrList1->_head;
     Node* head2=StrList2->_head;
     while (head1!=NULL&&head2!=NULL)
@@ -312,33 +321,7 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
     }
     return 1;
 }
-// StrList* StrList_clone(const StrList* StrList)
-// {
-//         if (StrList==NULL)
-//         {
-//             return StrList_alloc();
-//         }
 
-//         StrList* list=StrList_alloc();
-//         Node * temp=Node_alloc(StrList->_head->data,NULL);
-//         list->_head=temp;
-//         list->_size=list->_size+1;
-//         Node * head=StrList->_head;
-//         head=head->_next;
-//         while (head!=NULL)
-//         {
-//          Node *temp_loclal=Node_alloc(head->data,NULL);
-//           temp->_next=temp_loclal;
-//           temp=temp->_next;
-//           head=head->_next;
-//           free(temp_loclal->data);
-//           free(temp_loclal);
-//         }
-
-//          free(temp->data);
-//          free(temp);
-//         return list;
-// }
 StrList* StrList_clone(const StrList* originalList) {
     if (originalList == NULL) {
         return StrList_alloc();
